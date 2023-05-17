@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Audios</title>
+</head>
+
+<body>
+
+    <form method="POST" action="/enviar">
+        <input type="text" name="input_text">
+        <button type="submit">Iniciar</button>
+    </form>
+    <form method="POST" action="/parar">
+        <button type="submit">Parar</button>
+    </form>
+
+    <br><br>
+
+    <ul id="listaMusicas">
+
+    </ul>
+
+    <div id="caixa">
+
+    </div>
+
+    <script>
+        let listaJSON = '{{listaJSON|safe}}'
+        lista = JSON.parse(listaJSON)
+
+        listaMusicas = document.getElementById('listaMusicas')
+
+        function tocarMusica(event) {
+
+            caixa = document.getElementById('caixa')
+            caixa.innerHTML = ''
+
+            let musica = event.target.innerText
+
+            let parametro = encodeURIComponent(musica)
+
+            let controleMusica = document.getElementById('controleMusica')
+
+
+            audio = document.createElement('audio')
+            audio.setAttribute('controls', 'true');
+            src = document.createElement('source')
+            src.src = 'http://127.0.0.1:5000/enviar/' + musica
+            audio.appendChild(src)
+            caixa.appendChild(audio)
+
+        }
+
+        for (item of lista) {
+            li = document.createElement('li')
+            a = document.createElement('a')
+            br = document.createElement('br')
+            a.href = '#'
+
+            texto = document.createTextNode(item)
+
+            a.appendChild(texto)
+            li.appendChild(a)
+
+            li.addEventListener('click', () => { tocarMusica(event) })
+
+            listaMusicas.appendChild(li)
+            listaMusicas.appendChild(br)
+        }
+
+    </script>
+</body>
+
+</html>
